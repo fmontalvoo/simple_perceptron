@@ -4,10 +4,8 @@ Point[] points = new Point[100];
 
 void setup() {
   size(400, 400);
-  float[] inputs = {1, -0.87};
-  perceptron = new Perceptron();
-  int guess = perceptron.guess(inputs);
-  println(guess);
+  
+  perceptron = new Perceptron(3);
 
   for (int i = 0; i < points.length; i++) {
     points[i] = new Point();
@@ -19,7 +17,7 @@ void draw() {
   for (Point p : points) {
     p.show();
 
-    float[] inputs = {p.x, p.y};
+    float[] inputs = {p.x, p.y, p.bias};
 
     int guess = perceptron.guess(inputs);
 
@@ -29,15 +27,29 @@ void draw() {
       fill(255, 0, 0);
 
     noStroke();
-    ellipse(p.x, p.y, 8, 8);
+    ellipse(p.pointX(), p.pointY(), 8, 8);
   }
   stroke(0);
-  line(0, 0, width, height);
+
+  float x1 = -1;
+  float y1 = f(x1);
+  Point p1 = new Point(x1, y1);
+
+  float x2 = 1;
+  float y2 = f(x2);
+  Point p2 = new Point(x2, y2);
+
+  line(p1.pointX(), p1.pointY(), p2.pointX(), p2.pointY());
+
+  Point p3 = new Point(-1, perceptron.guessY(-1));
+  Point p4 = new Point(1, perceptron.guessY(1));
+  
+  line(p3.pointX(), p3.pointY(), p4.pointX(), p4.pointY());
 }
 
 void mousePressed() {
   for (Point p : points) {
-    float[] inputs = {p.x, p.y};
+    float[] inputs = {p.x, p.y, p.bias};
     perceptron.train(inputs, p.label);
   }
 }

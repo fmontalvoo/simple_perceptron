@@ -1,16 +1,37 @@
+float f(float x){
+  // f(x) = mx + b
+  return 0.21*x + 0.14;
+}
+
+
 class Point {
 
   int label;
   float x, y;
+  float bias = 1;
 
   Point() {
-    this.x = random(width);
-    this.y = random(height);
+    this.x = random(-1, 1);
+    this.y = random(-1, 1);
 
-    if (this.y > this.x)
+    float y_ = f(this.x);
+    if (this.y > y_)
       this.label = 1;
     else
       this.label = -1;
+  }
+  
+  Point(float x, float y){
+    this.x = x;
+    this.y = y;
+  }
+
+  float pointX() {
+    return map(this.x, -1, 1, 0, width);
+  }
+
+  float pointY() {
+    return map(this.y, -1, 1, height, 0);
   }
 
   void show() {
@@ -20,6 +41,8 @@ class Point {
     else
       fill(0);
 
-    ellipse(this.x, this.y, 16, 16);
+    float px = this.pointX();
+    float py = this.pointY();
+    ellipse(px, py, 16, 16);
   }
 }
